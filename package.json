@@ -4,7 +4,7 @@
   "description": "A utility package for interacting with PDF.js Express APIs",
   "main": "dist/index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "build": "parcel build src/index.ts"
   },
   "repository": {
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/pdfjs-express/api-util#readme",
   "devDependencies": {
     "@types/node": "^13.13.5",
+    "jest": "^26.0.1",
     "parcel": "^1.12.4"
   },
   "dependencies": {
