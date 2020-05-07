@@ -1,6 +1,6 @@
-import { Endpoint } from '../spec/endpoint';
-import { throwMissingDataError } from './errors';
-import { FileType } from '../index';
+import { Endpoint } from './spec/endpoint';
+import { throwMissingDataError } from './util/errors';
+import { FileType } from './APIUtils';
 import fetch from 'isomorphic-fetch';
 import FormData from 'isomorphic-form-data';
 
