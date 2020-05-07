@@ -19,4 +19,4 @@ export const ENDPOINTS: Record<string, Endpoint> = {
     method: 'post'
   },
 };
-export const MAX_FILE_SIZE = 1000;
+export const MAX_FILE_SIZE = 5.5e+6; // 5.5mb

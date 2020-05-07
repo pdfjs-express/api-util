@@ -1,3 +1,4 @@
+import { isClient } from './util/env';
 import { throwFileTooLargeError, throwInvalidFileTypeError, throwInvalidXFDFError, throwMissingDataError } from './util/errors';
 import { MAX_FILE_SIZE, ENDPOINTS } from './config';
 import RequestBuilder from './RequestBuilder';
@@ -15,11 +16,9 @@ export type FileType = string | Blob | File | Buffer;
 class ExpressAPIUtils {
 
   // private
-  private serverKey: string;
-  private clientKey: string;
+  private activeKey: string;
   private activeFile?: FileType;
   private activeXFDF?: string;
-  private lastKey?: string;
 
   /**
    * Initialize the class
@@ -31,13 +30,12 @@ class ExpressAPIUtils {
     serverKey,
     clientKey
   }: ExpressRESTUtilConstructorOptions) {
-    this.serverKey = serverKey;
-    this.clientKey = clientKey;
+    this.activeKey = isClient ? clientKey : serverKey;
   }
 
   /**
    * Sets the file to process. Throws if the file is local and is too big.
-   * @param {string|Blob|File|Buffer} file The file to process
+   * @param {string|Blob|File|Buffer} file The file to process. Type must be 'string' (url) if the file is over 5.5mb
    * @returns {ExpressRESTUtil} Returns current instance for function chaining
    */
   setFile(file: FileType) {
@@ -81,6 +79,7 @@ class ExpressAPIUtils {
 
   /**
    * Calls the PDF.js Express API to merge the current file and XFDF together.
+   * @returns {Promise<Response>} Returns a Response object
    */
   async merge() {
     if (!this.activeXFDF || !this.activeFile) {
@@ -88,15 +87,15 @@ class ExpressAPIUtils {
       return;
     }
 
-    const data = await new RequestBuilder()
+    const response = await new RequestBuilder()
       .setEndpoint(ENDPOINTS.MERGE)
       .setFile(this.activeFile)
       .setXFDF(this.activeXFDF)
+      .setLicense(this.activeKey)
       .make();
     
-    const { url, id, key } = data;
-
     this.done();
+    return response;
   }
 }
 

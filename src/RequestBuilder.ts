@@ -1,3 +1,4 @@
+import { Response } from './Response';
 import { Endpoint } from './spec/endpoint';
 import { throwMissingDataError } from './util/errors';
 import { FileType } from './APIUtils';
@@ -45,10 +46,19 @@ class RequestBuilder {
       form.append('xfdf', this.xfdf);
     }
 
-    return fetch(this.endpoint?.url, {
+    const data = await fetch(this.endpoint?.url, {
       method: this.endpoint?.method,
       body: form,
-    }).then(resp => resp.json())
+    }).then(resp => resp.json());
+
+    const { url, id, key } = data;
+
+    return new Response(
+      url,
+      id,
+      key,
+      this.license
+    );
   }
 }
 
