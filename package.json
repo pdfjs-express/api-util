@@ -1,0 +1,28 @@
+{
+  "name": "@pdftron/pdfjs-express-rest-util",
+  "version": "0.0.1",
+  "description": "A utility package for interacting with PDF.js Express APIs",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "test",
+    "build": "parcel build src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdfjs-express/api-util.git"
+  },
+  "author": "Logan Bittner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pdfjs-express/api-util/issues"
+  },
+  "homepage": "https://github.com/pdfjs-express/api-util#readme",
+  "devDependencies": {
+    "@types/node": "^13.13.5",
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "isomorphic-form-data": "^2.0.0"
+  }
+}
