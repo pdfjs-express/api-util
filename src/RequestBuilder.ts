@@ -51,14 +51,15 @@ class RequestBuilder {
       body: form,
     }).then(resp => resp.json());
 
-    const { url, id, key } = data;
+    const { url, id, key, xfdf } = data;
 
-    return new Response(
+    return new Response({
       url,
       id,
       key,
-      this.license
-    );
+      license: this.license,
+      xfdf: xfdf || this.xfdf
+    });
   }
 }
 

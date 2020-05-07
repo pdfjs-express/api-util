@@ -79,7 +79,17 @@ class ExpressAPIUtils {
 
   /**
    * Calls the PDF.js Express API to merge the current file and XFDF together.
-   * @returns {Promise<Response>} Returns a Response object
+   * @returns {Promise<Response>} Resolves to a Response object
+   * @example
+   * const instance = new ExpressAPIUtils({ serverKey: '', clientKey: '' });
+   * instance.setFile(myFile)
+   * instance.setXFDF(xfdfString)
+   * const resp = await instance.merge();
+   * 
+   * const url = resp.url; // the URL of the new file
+   * const key = resp.key; // The key used to fetch the file
+   * 
+   * const blob = await resp.getBlob(); // downloads the 'url' and returns a blob
    */
   async merge() {
     if (!this.activeXFDF || !this.activeFile) {
@@ -91,6 +101,62 @@ class ExpressAPIUtils {
       .setEndpoint(ENDPOINTS.MERGE)
       .setFile(this.activeFile)
       .setXFDF(this.activeXFDF)
+      .setLicense(this.activeKey)
+      .make();
+    
+    this.done();
+    return response;
+  }
+
+  /**
+   * Calls the PDF.js Express API to set the XFDF of a document. This will overwrite any existing annotations/xfdf the document may have.
+   * @returns {Promise<Response>} Resolves to a Response object
+   * @example
+   * const instance = new ExpressAPIUtils({ serverKey: '', clientKey: '' });
+   * instance.setFile(myFile)
+   * instance.setXFDF(xfdfString)
+   * const resp = await instance.set();
+   * 
+   * const url = resp.url; // the URL of the new file
+   * const key = resp.key; // The key used to fetch the file
+   * 
+   * const blob = await resp.getBlob(); // downloads the 'url' and returns a blob
+   */
+  async set() {
+    if (!this.activeXFDF || !this.activeFile) {
+      throwMissingDataError('set', ['file, xfdf'])
+      return;
+    }
+
+    const response = await new RequestBuilder()
+      .setEndpoint(ENDPOINTS.SET)
+      .setFile(this.activeFile)
+      .setXFDF(this.activeXFDF)
+      .setLicense(this.activeKey)
+      .make();
+    
+    this.done();
+    return response;
+  }
+
+  /**
+   * Calls the PDF.js Express to extract the xfdf from a document
+   * @returns {Promise<Response>} Resolves to a Response object. You can access the xfdf with `response.xfdf`
+   * @example
+   * const instance = new ExpressAPIUtils({ serverKey: '', clientKey: '' });
+   * instance.setFile(myFile)
+   * const resp = await instance.extract();
+   * const xfdfString = resp.xfdf;
+   */
+  async extract() {
+    if (!this.activeFile) {
+      throwMissingDataError('extract', ['file, xfdf'])
+      return;
+    }
+
+    const response = await new RequestBuilder()
+      .setEndpoint(ENDPOINTS.SET)
+      .setFile(this.activeFile)
       .setLicense(this.activeKey)
       .make();
     

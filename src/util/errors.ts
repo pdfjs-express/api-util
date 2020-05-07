@@ -14,3 +14,7 @@ export const throwInvalidXFDFError = () => {
 export const throwMissingDataError = (funcName: string, required: string[]) => {
   throw new Error(`${funcName} requires properties ${required.join(', ')} to be set.`);
 }
+
+export const throwInvalidRequestError = (funcName: string, reason: string) => {
+  throw new Error(`${funcName} cannot be executed in this instance: ${reason}`)
+}

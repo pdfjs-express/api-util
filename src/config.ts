@@ -18,5 +18,5 @@ export const ENDPOINTS: Record<string, Endpoint> = {
     url: `${ROOT_URL}/delete`,
     method: 'post'
   },
-};
+} as const;
 export const MAX_FILE_SIZE = 5.5e+6; // 5.5mb

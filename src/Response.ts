@@ -1,6 +1,7 @@
 import { ENDPOINTS } from './config';
 import fetch from 'isomorphic-fetch';
 import FormData from 'isomorphic-form-data';
+import { throwInvalidRequestError } from './util/errors';
 
 /**
  * A class representing the response from the Express REST API
@@ -10,17 +11,29 @@ import FormData from 'isomorphic-form-data';
  * @property {string} url The URL used for downloading the document
  * @property {string} id The ID of the document
  * @property {string} key The authentication key used to download the file. Get requests to 'url` must contain a `Authorization: {key}` header
+ * @property {string} [xfdf] The xfdf for the document
  */
 export class Response {
 
   private blob?: Blob;
+  public url?: string
+  public id?: string
+  public key?: string
+  public xfdf?: string
+  private license?: string
 
-  constructor(
-    public url?: string,
-    public id?: string,
-    public key?: string,
-    private license?: string
-  ) {
+  constructor({ 
+    url,
+    id,
+    key,
+    license,
+    xfdf
+  }) {
+    this.url = url;
+    this.id = id;
+    this.key = key;
+    this.license = license;
+    this.xfdf = xfdf;
   }
 
   /**
@@ -28,6 +41,11 @@ export class Response {
    * @returns {Promise<Blob>}
    */
   async getBlob(): Promise<Blob> {
+
+    if (!this.url) {
+      throwInvalidRequestError('getBlob', 'There is no output file to fetch')
+    }
+
     if (this.blob) {
       return this.blob;
     }
@@ -44,13 +62,29 @@ export class Response {
   }
 
   /**
-   * Deletes the file from the server and destroys the instance
+   * Deletes the file from the server and destroys the instance.
+   * If delete is not called, the file will still becoming inaccessible after 3 hours,
+   * and will be permanently deleted after ~24 hours.
+   * 
+   * Deleting a file counts as a transaction
    * @returns {void}
+   * @example
+   * const instance = new APIUtils({ serverKey: '', clientKey: '' });
+   * instance.setFile(myFile)
+   * instance.setXFDF(xfdfString)
+   * const resp = await instance.set();
+   * const blob = await resp.getBlob(); // get the blob for your apps usage
+   * await resp.deleteFile(); // delete the file
    */
   async deleteFile() {
+
+    if (!this.id) {
+      throwInvalidRequestError('deleteFile', 'There is no temporary file to delete')
+    }
+
     await fetch(ENDPOINTS.DELETE.url, {
       method: ENDPOINTS.DELETE.method,
-      body: new FormData().append('license', this.license)
+      body: new FormData().append('license', this.license).append('id', this.id)
     })
 
     this.blob = undefined;
