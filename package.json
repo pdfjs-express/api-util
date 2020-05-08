@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/pdfjs-express/api-util#readme",
   "devDependencies": {
+    "@types/jest": "^25.2.1",
     "@types/node": "^13.13.5",
     "jest": "^26.0.1",
-    "parcel": "^1.12.4"
+    "parcel": "^1.12.4",
+    "ts-jest": "^25.5.0",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",

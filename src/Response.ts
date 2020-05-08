@@ -66,7 +66,7 @@ export class Response {
    * If delete is not called, the file will still becoming inaccessible after 3 hours,
    * and will be permanently deleted after ~24 hours.
    * 
-   * Deleting a file counts as a transaction
+   * Deleting a file does not count as a transaction
    * @returns {void}
    * @example
    * const instance = new APIUtils({ serverKey: '', clientKey: '' });
@@ -82,9 +82,13 @@ export class Response {
       throwInvalidRequestError('deleteFile', 'There is no temporary file to delete')
     }
 
+    const data = new FormData();
+    data.append('license', this.license);
+    data.append('id', this.id);
+
     await fetch(ENDPOINTS.DELETE.url, {
       method: ENDPOINTS.DELETE.method,
-      body: new FormData().append('license', this.license).append('id', this.id)
+      body: data
     })
 
     this.blob = undefined;

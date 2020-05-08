@@ -43,9 +43,9 @@ class ExpressAPIUtils {
     let size;
     if (typeof file === 'string') {
       size = 0; // string doesnt have a size
-    } else if (file instanceof File || file instanceof Blob) {
+    } else if (isClient && (file instanceof File || file instanceof Blob)) {
       size = file.size;
-    } else if (file instanceof Buffer) {
+    } else if (!isClient && file instanceof Buffer) {
       size = file.length;
     } else {
       throwInvalidFileTypeError();
@@ -93,8 +93,7 @@ class ExpressAPIUtils {
    */
   async merge() {
     if (!this.activeXFDF || !this.activeFile) {
-      throwMissingDataError('merge', ['file, xfdf'])
-      return;
+      return throwMissingDataError('merge', ['file, xfdf'])
     }
 
     const response = await new RequestBuilder()
@@ -124,8 +123,7 @@ class ExpressAPIUtils {
    */
   async set() {
     if (!this.activeXFDF || !this.activeFile) {
-      throwMissingDataError('set', ['file, xfdf'])
-      return;
+      return throwMissingDataError('set', ['file, xfdf'])
     }
 
     const response = await new RequestBuilder()
@@ -150,12 +148,11 @@ class ExpressAPIUtils {
    */
   async extract() {
     if (!this.activeFile) {
-      throwMissingDataError('extract', ['file, xfdf'])
-      return;
+      return throwMissingDataError('extract', ['file'])
     }
 
     const response = await new RequestBuilder()
-      .setEndpoint(ENDPOINTS.SET)
+      .setEndpoint(ENDPOINTS.EXTRACT)
       .setFile(this.activeFile)
       .setLicense(this.activeKey)
       .make();
