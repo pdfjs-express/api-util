@@ -39,7 +39,7 @@ class ExpressAPIUtils {
   }
 
   /**
-   * Sets the file to process. Throws if the file is local and is too big.
+   * Sets the file to process. Throws if the file is in memory and is too big.
    * @param {string|Blob|File|Buffer} file The file to process. Type must be 'string' (url) if the file is over 5.5mb
    * @returns {ExpressRESTUtil} Returns current instance for function chaining
    */
