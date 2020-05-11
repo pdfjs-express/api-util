@@ -14,4 +14,4 @@ The API can currently perform the following actions:
 
 It can be used on either the server or the client.
 
-For documentation, APIs, and examples, please see the [API docs](https://pdfjs.express/api/utils)
+**For documentation, APIs, and examples, please see the [API docs](https://pdfjs.express/api/utils)**
