@@ -1,3 +1,4 @@
+import { readFixture } from './util';
 import { FormData } from 'isomorphic-form-data';
 import { ENDPOINTS } from './../src/config';
 import APIUtils from '../src/APIUtils';
@@ -131,7 +132,33 @@ describe('API tests', () => {
   describe('error handling', () => {
 
     it('throws if a large file is added', async () => {
-      
+      const instance = new APIUtils(KEYS);
+      const file = readFixture('large.pdf');
+      assert.throws(() => {
+        instance.setFile(file);
+      }, /That file is too large/);
+    })
+
+    it('throws if empty XFDF is pushed', async () => {
+      const instance = new APIUtils(KEYS);
+
+      assert.throws(() => {
+        instance.setXFDF('');
+      }, /XFDF must be a string and cannot be empty/)
+    })
+
+    it('throws if APIs are called without parameters set', async () => {
+
+      const instance = new APIUtils(KEYS);
+
+      assert.rejects(async () => {
+        await instance.merge()
+      }, /requires properties/)
+
+      assert.rejects(async () => {
+        await instance.set()
+      }, /requires properties/)
+
     })
 
   })
