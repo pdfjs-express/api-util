@@ -25,6 +25,13 @@ class ExpressUtils {
    * @param {Object} options
    * @param {string} options.serverKey Your server side license key. Can be fetched from your profile at https://pdfjs.express
    * @param {string} options.clientKey Your client side license key. Can be fetched from your profile at https://pdfjs.express
+   * @example
+   * import ExpressUtils from '@pdftron/pdfjs-express-utils'
+   * 
+   * const util = new ExpressUtils({
+   *  serverKey: 'my_server_key',
+   *  clientKey: 'my_client_key'
+   * })
    */
   constructor({
     serverKey,
