@@ -2,6 +2,12 @@
 
 This code adds a download button to the header. When the button is clicked, it merges the annotations into the document and triggers a file download.
 
+**Relevant PDF.js Express APIs**
+
+- [setHeaderItems](https://pdfjs.express/documentation/ui-customization/customizing-header)
+- [exportAnnotations](https://pdfjs.express/api/CoreControls.AnnotationManager.html#exportAnnotations__anchor)
+- [getFileData](https://pdfjs.express/api/CoreControls.Document.html#getFileData__anchor)
+
 ```js
 
 import WebViewer from '@pdftron/pdfjs-express'
