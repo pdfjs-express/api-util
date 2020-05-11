@@ -67,7 +67,7 @@ export class Response {
    * and will be permanently deleted after ~24 hours.
    * 
    * Deleting a file does not count as a transaction
-   * @returns {void}
+   * @returns {Promise<void>}
    * @example
    * const instance = new APIUtils({ serverKey: '', clientKey: '' });
    * instance.setFile(myFile)

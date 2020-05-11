@@ -23,7 +23,7 @@
     },
     "better-docs": {
       "name": "PDF.js Express Rest Utility API",
-      "title": "",
+      "title": "PDF.js Express Utils",
       "css": "docs.css",
       "hideGenerator": false,
       "navigation": [
