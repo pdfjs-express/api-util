@@ -1,0 +1,9 @@
+node_modules
+test
+src
+docs
+docs-src
+.cache
+jest.config.js
+jsdoc.json
+tsconfig.json
