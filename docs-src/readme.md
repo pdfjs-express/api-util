@@ -2,6 +2,10 @@
 
 This is a package that contains utility functions for working the the PDF.js Express REST API.
 
+This package requires that you have signed up for [PDF.js Express](https://pdfjs.express) and have enabled the API.
+
+This package is intended to be used alongside the [PDF.js Express SDK](https://pdfjs.express/documentation)
+
 The API can currently perform the following actions:
 
 - Merge annotations into a PDF (XFDF into PDF)
@@ -69,3 +73,7 @@ const { xfdf } = response;
 ```
 
 For more examples, see the tutorials section at the top right of the page.
+
+## Caveats
+
+- The `setFile` API can only accept files in memory if they are less than 5.5 mb in size. If the file is larger than that, the file must be uploaded somewhere that the API can download it and you must pass the URL to `setFile`.
