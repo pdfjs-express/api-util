@@ -30,6 +30,11 @@ class ExpressAPIUtils {
     serverKey,
     clientKey
   }: ExpressRESTUtilConstructorOptions) {
+    if (!serverKey && !clientKey) {
+      throwMissingDataError('constructor', ['serverKey', 'clientKey'])
+    }
+
+    //@ts-ignore
     this.activeKey = isClient ? clientKey : serverKey;
   }
 

@@ -161,6 +161,23 @@ describe('API tests', () => {
 
     })
 
+    it('throws if keys are not passed', async () => {
+      assert.throws(() => {
+        // @ts-ignore
+        const instance = new APIUtils({});
+      }, /requires properties/)
+    })
+
+    it('throws if invalid file type is set', async () => {
+
+      const instance = new APIUtils(KEYS);
+      
+      assert.throws(() => {
+        // @ts-ignore
+        instance.setFile(23);
+      }, /File must be of type File/)
+    })
+
   })
 
 })
