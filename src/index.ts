@@ -1,3 +1,3 @@
-import APIUtils from './APIUtils';
+import APIUtils from './ExpressUtils';
 
 export default APIUtils;

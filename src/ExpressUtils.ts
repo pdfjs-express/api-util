@@ -3,7 +3,7 @@ import { throwFileTooLargeError, throwInvalidFileTypeError, throwInvalidXFDFErro
 import { MAX_FILE_SIZE, ENDPOINTS } from './config';
 import RequestBuilder from './RequestBuilder';
 
-type ExpressRESTUtilConstructorOptions = {
+type ExpressUtilsOptions = {
   serverKey: string,
   clientKey: string
 }
@@ -13,7 +13,7 @@ export type FileType = string | Blob | File | Buffer;
 /**
  * A class for interacting with the PDF.js Express REST APIs
  */
-class ExpressAPIUtils {
+class ExpressUtils {
 
   // private
   private activeKey: string;
@@ -29,7 +29,7 @@ class ExpressAPIUtils {
   constructor({
     serverKey,
     clientKey
-  }: ExpressRESTUtilConstructorOptions) {
+  }: ExpressUtilsOptions) {
     if (!serverKey && !clientKey) {
       throwMissingDataError('constructor', ['serverKey', 'clientKey'])
     }
@@ -86,7 +86,7 @@ class ExpressAPIUtils {
    * Calls the PDF.js Express API to merge the current file and XFDF together.
    * @returns {Promise<Response>} Resolves to a Response object
    * @example
-   * const instance = new ExpressAPIUtils({ serverKey: '', clientKey: '' });
+   * const instance = new ExpressUtils({ serverKey: '', clientKey: '' });
    * instance.setFile(myFile)
    * instance.setXFDF(xfdfString)
    * const resp = await instance.merge();
@@ -116,7 +116,7 @@ class ExpressAPIUtils {
    * Calls the PDF.js Express API to set the XFDF of a document. This will overwrite any existing annotations/xfdf the document may have.
    * @returns {Promise<Response>} Resolves to a Response object
    * @example
-   * const instance = new ExpressAPIUtils({ serverKey: '', clientKey: '' });
+   * const instance = new ExpressUtils({ serverKey: '', clientKey: '' });
    * instance.setFile(myFile)
    * instance.setXFDF(xfdfString)
    * const resp = await instance.set();
@@ -146,7 +146,7 @@ class ExpressAPIUtils {
    * Calls the PDF.js Express to extract the xfdf from a document
    * @returns {Promise<Response>} Resolves to a Response object. You can access the xfdf with `response.xfdf`
    * @example
-   * const instance = new ExpressAPIUtils({ serverKey: '', clientKey: '' });
+   * const instance = new ExpressUtils({ serverKey: '', clientKey: '' });
    * instance.setFile(myFile)
    * const resp = await instance.extract();
    * const xfdfString = resp.xfdf;
@@ -167,4 +167,4 @@ class ExpressAPIUtils {
   }
 }
 
-export default ExpressAPIUtils;
+export default ExpressUtils;

@@ -1,7 +1,7 @@
 import { Response } from './Response';
 import { Endpoint } from './spec/endpoint';
 import { throwMissingDataError } from './util/errors';
-import { FileType } from './APIUtils';
+import { FileType } from './ExpressUtils';
 import fetch from 'isomorphic-fetch';
 import FormData from 'isomorphic-form-data';
 

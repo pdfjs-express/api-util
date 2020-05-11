@@ -1,0 +1,41 @@
+{
+  "tags": {
+    "allowUnknownTags": ["optional"]
+  },
+  "plugins": [
+      "node_modules/better-docs/typescript"
+  ],
+  "source": {
+      "includePattern": "\\.(jsx|js|ts|tsx)$"
+  },
+  "opts": {
+    "template": "node_modules/better-docs",
+    "destination": "./docs",
+    "readme": "docs-src/readme.md"
+  },
+  "templates": {
+    "default": {
+      "staticFiles": {
+        "include": [
+            "./docs-src"
+        ]
+      }
+    },
+    "better-docs": {
+      "name": "PDF.js Express Rest Utility API",
+      "title": "",
+      "css": "docs.css",
+      "hideGenerator": false,
+      "navigation": [
+          {
+              "label": "Github",
+              "href": "https://github.com/SoftwareBrothers/admin-bro"
+          },
+          {
+              "label": "Example Application",
+              "href": "https://admin-bro-example-app.herokuapp.com/admin"
+          }
+      ]
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { readFixture } from './util';
 import { FormData } from 'isomorphic-form-data';
 import { ENDPOINTS } from './../src/config';
-import APIUtils from '../src/APIUtils';
+import APIUtils from '../src/ExpressUtils';
 import fetch from 'isomorphic-fetch';
 import assert from 'assert';
 
