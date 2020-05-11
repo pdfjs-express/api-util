@@ -2,6 +2,12 @@
 
 This is a package that contains utility functions for working the the PDF.js Express REST API.
 
+The API can currently perform the following actions:
+
+- Merge annotations into a PDF (XFDF into PDF)
+- Set annotations on a PDF (XFDF into PDF)
+- Extract annotations from a PDF (XFDF from PDF)
+
 It can be used on either the server or the client.
 
 ## Installation
@@ -35,12 +41,9 @@ const utils = new ExpressUtils({
   clientKey: 'your_client_key'
 })
 
-utils.setFile('https://yourwebsite.com/your_file.pdf'); // can be a URL (server or client)
-// utils.setFile(myBlob); // or a Blob object (server or client)
-// utils.setFile(myFile); // or a File object (client)
-// utils.setFile(fs.readFileSync(path_to_file)) // or a buffer (server)
-
-utils.setXFDF(xfdf_string);
+utils
+  .setFile('https://yourwebsite.com/your_file.pdf')
+  .setXFDF(xfdf_string);
 
 const response = await utils.merge(); // merge XFDF
 // const response = await utils.set(); // or set XFDF
@@ -60,10 +63,9 @@ const utils = new ExpressUtils({
 })
 
 utils.setFile('https://yourwebsite.com/your_file.pdf'); // can be a URL (server or client)
-// utils.setFile(myBlob); // or a Blob object (server or client)
-// utils.setFile(myFile); // or a File object (client)
-// utils.setFile(fs.readFileSync(path_to_file)) // or a buffer (server)
 
 const response = await utils.extract(); // extract XFDF
-const {xfdf} = response;
+const { xfdf } = response;
 ```
+
+For more examples, see the tutorials section at the top right of the page.

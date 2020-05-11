@@ -11,7 +11,8 @@
   "opts": {
     "template": "node_modules/better-docs",
     "destination": "./docs",
-    "readme": "docs-src/readme.md"
+    "readme": "docs-src/readme.md",
+    "tutorials": "./docs-src/tutorials"
   },
   "templates": {
     "default": {
@@ -25,17 +26,7 @@
       "name": "PDF.js Express Rest Utility API",
       "title": "PDF.js Express Utils",
       "css": "docs.css",
-      "hideGenerator": false,
-      "navigation": [
-          {
-              "label": "Github",
-              "href": "https://github.com/SoftwareBrothers/admin-bro"
-          },
-          {
-              "label": "Example Application",
-              "href": "https://admin-bro-example-app.herokuapp.com/admin"
-          }
-      ]
+      "hideGenerator": false
     }
   }
 }

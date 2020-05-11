@@ -4,8 +4,8 @@ import FormData from 'isomorphic-form-data';
 import { throwInvalidRequestError } from './util/errors';
 
 /**
- * A class representing the response from the Express REST API
- * Contains utility methods for working with files
+ * A class representing the response from the Express REST API.
+ * Contains utility methods for working with files.
  * Should not be directly instantiated, and should be returned the main SDK APIs.
  * 
  * @property {string} url The URL used for downloading the document
