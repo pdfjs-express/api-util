@@ -1,4 +1,5 @@
 import { Endpoint } from './spec/endpoint';
+import { env } from './util/env';
 
 export const ROOT_URL = 'https://api.pdfjs.express';
 export const ENDPOINTS: Record<string, Endpoint> = {
