@@ -3,7 +3,7 @@ import { Endpoint } from './spec/endpoint';
 import { throwMissingDataError } from './util/errors';
 import { FileType } from './ExpressUtils';
 import fetch from 'isomorphic-fetch';
-import FormData from 'isomorphic-form-data';
+import ISOFormData from 'isomorphic-form-data';
 
 class RequestBuilder {
 
@@ -33,7 +33,7 @@ class RequestBuilder {
   }
 
   async make() {
-    const form = new FormData();
+    const form = new ISOFormData();
 
     if (!this.file || !this.license || !this.endpoint) {
       throwMissingDataError('make', ['file', 'endpoint', 'license']);
@@ -48,8 +48,8 @@ class RequestBuilder {
 
     const data = await fetch(this.endpoint?.url, {
       method: this.endpoint?.method,
-      body: form,
-    }).then(resp => resp.json());
+      body: form as unknown as FormData,
+    }).then((resp: any) => resp.json());
 
     const { url, id, key, xfdf } = data;
 

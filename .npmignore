@@ -7,3 +7,6 @@ docs-src
 jest.config.js
 jsdoc.json
 tsconfig.json
+manual_test
+.gitignore
+webpack.config.js

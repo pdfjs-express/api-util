@@ -1,6 +1,6 @@
 import { ENDPOINTS } from './config';
 import fetch from 'isomorphic-fetch';
-import FormData from 'isomorphic-form-data';
+import ISOFormData from 'isomorphic-form-data';
 import { throwInvalidRequestError } from './util/errors';
 
 /**
@@ -13,6 +13,15 @@ import { throwInvalidRequestError } from './util/errors';
  * @property {string} key The authentication key used to download the file. Get requests to 'url` must contain a `Authorization: {key}` header
  * @property {string} [xfdf] The xfdf for the document
  */
+
+type ResponseOptions = {
+  url: string,
+  id: string,
+  key: string,
+  license: string,
+  xfdf: string
+}
+
 export class Response {
 
   private blob?: Blob;
@@ -28,7 +37,7 @@ export class Response {
     key,
     license,
     xfdf
-  }) {
+  }: ResponseOptions) {
     this.url = url;
     this.id = id;
     this.key = key;
@@ -55,7 +64,7 @@ export class Response {
       headers: {
         Authorization: this.key
       }
-    }).then(resp => resp.blob());
+    }).then((resp: any) => resp.blob());
 
     this.blob = blob;
     return blob;
@@ -82,13 +91,13 @@ export class Response {
       throwInvalidRequestError('deleteFile', 'There is no temporary file to delete')
     }
 
-    const data = new FormData();
+    const data = new ISOFormData();
     data.append('license', this.license);
     data.append('id', this.id);
 
     await fetch(ENDPOINTS.DELETE.url, {
       method: ENDPOINTS.DELETE.method,
-      body: data
+      body: data as unknown as FormData
     })
 
     this.blob = undefined;
