@@ -59,10 +59,7 @@ class RequestBuilder {
     const error = json.error;
 
     if (error) {
-      switch (error.code) {
-        case 22:
-          throw new Error('Unauthorized - invalid license key')
-      }
+      throw new Error(error.message)
     }
 
     const { url, id, key, xfdf } = json;
