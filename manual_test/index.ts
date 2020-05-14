@@ -16,8 +16,17 @@ const XFDF = `<?xml version="1.0" encoding="UTF-8" ?><xfdf xmlns="http://ns.adob
 const REMOTE_DOC = `https://pdftron.s3.amazonaws.com/downloads/pl/webviewer-demo-annotated.pdf`;
 const KEY = `uOH9d5amBnVrc9N1aCyE`;
 
+const getKeys = () => {
+  return {
+    // @ts-ignore
+    serverKey: document.getElementById('serverKey').value,
+    // @ts-ignore
+    clientKey: document.getElementById('clientKey').value
+  }
+}
+
 const init = async () => {
-  createButton('Merge URL - Invalid Key', async (button) => {
+  createButton('Merge from URL - Invalid Key', async (button) => {
     const u = new Utils({
       serverKey: 'test',
       clientKey: 'test'
@@ -32,11 +41,8 @@ const init = async () => {
     }
   })
 
-  createButton('Merge URL - Invalid domain', async (button) => {
-    await new Utils({
-      serverKey: KEY,
-      clientKey: KEY
-    }).setFile(REMOTE_DOC)
+  createButton('Merge from URL - Valid', async (button) => {
+    await new Utils(getKeys()).setFile(REMOTE_DOC)
       .setXFDF(XFDF)
       .merge();
   })
