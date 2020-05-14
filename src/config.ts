@@ -2,7 +2,7 @@ import { Endpoint } from './spec/endpoint';
 import { env } from './util/env';
 
 export const ROOT_URL = env === 'test' ?
-  'https://d24tmkhit7.execute-api.us-east-1.amazonaws.com/staging/xfdf' :
+  'https://d24tmkhit7.execute-api.us-east-1.amazonaws.com/staging' :
   'https://api.pdfjs.express';
 
 export const ENDPOINTS: Record<string, Endpoint> = {
