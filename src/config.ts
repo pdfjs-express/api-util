@@ -7,15 +7,15 @@ export const ROOT_URL = env === 'test' ?
 
 export const ENDPOINTS: Record<string, Endpoint> = {
   MERGE: {
-    url: `${ROOT_URL}/merge`,
+    url: `${ROOT_URL}/xfdf/merge`,
     method: 'post'
   },
   SET: {
-    url: `${ROOT_URL}/set`,
+    url: `${ROOT_URL}/xfdf/set`,
     method: 'post'
   },
   EXTRACT: {
-    url: `${ROOT_URL}/extract`,
+    url: `${ROOT_URL}/xfdf/extract`,
     method: 'post'
   },
   DELETE: {
