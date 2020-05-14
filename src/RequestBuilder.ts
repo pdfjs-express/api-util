@@ -46,12 +46,26 @@ class RequestBuilder {
       form.append('xfdf', this.xfdf);
     }
 
-    const data = await fetch(this.endpoint?.url, {
-      method: this.endpoint?.method,
-      body: form as unknown as FormData,
-    }).then((resp: any) => resp.json());
+    let json;
+    try {
+      json = await fetch(this.endpoint?.url, {
+        method: this.endpoint?.method,
+        body: form as unknown as FormData,
+      }).then(d => d.json());
+    } catch (e) {
+      throw e;
+    }
 
-    const { url, id, key, xfdf } = data;
+    const error = json.error;
+
+    if (error) {
+      switch (error.code) {
+        case 22:
+          throw new Error('Unauthorized - invalid license key')
+      }
+    }
+
+    const { url, id, key, xfdf } = json;
 
     return new Response({
       url,

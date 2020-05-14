@@ -1,3 +1,4 @@
+import { Response } from './Response';
 import { isClient } from './util/env';
 import { throwFileTooLargeError, throwInvalidFileTypeError, throwInvalidXFDFError, throwMissingDataError } from './util/errors';
 import { MAX_FILE_SIZE, ENDPOINTS } from './config';
@@ -103,7 +104,7 @@ class ExpressUtils {
    * 
    * const blob = await resp.getBlob(); // downloads the 'url' and returns a blob
    */
-  async merge() {
+  async merge(): Promise<Response> {
     if (!this.activeXFDF || !this.activeFile) {
       return throwMissingDataError('merge', ['file, xfdf'])
     }
@@ -133,7 +134,7 @@ class ExpressUtils {
    * 
    * const blob = await resp.getBlob(); // downloads the 'url' and returns a blob
    */
-  async set() {
+  async set(): Promise<Response> {
     if (!this.activeXFDF || !this.activeFile) {
       return throwMissingDataError('set', ['file, xfdf'])
     }
@@ -158,7 +159,7 @@ class ExpressUtils {
    * const resp = await instance.extract();
    * const xfdfString = resp.xfdf;
    */
-  async extract() {
+  async extract(): Promise<Response> {
     if (!this.activeFile) {
       return throwMissingDataError('extract', ['file'])
     }

@@ -35,12 +35,8 @@ module.exports = {
       outputAsModuleFolder: true
     }),
     new webpack.DefinePlugin({
-      'process.env.ENV': env
+      ENV: `'${env}'`
     })
-  ],
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000
-  }
+  ]
 };
+
