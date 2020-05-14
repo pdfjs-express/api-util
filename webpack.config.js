@@ -8,6 +8,7 @@ const mode = env === 'production' ? 'production' : 'development'
 module.exports = {
   entry: './src/index.ts',
   mode,
+  watch: mode === 'development',
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),

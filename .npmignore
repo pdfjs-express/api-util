@@ -10,3 +10,4 @@ tsconfig.json
 manual_test
 .gitignore
 webpack.config.js
+parcel_dist

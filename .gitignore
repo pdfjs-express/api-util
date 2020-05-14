@@ -7,6 +7,7 @@ yarn-error.log*
 lerna-debug.log*
 docs/
 .parcel-cache
+parcel_dist
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

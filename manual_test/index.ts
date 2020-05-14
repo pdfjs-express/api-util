@@ -39,8 +39,6 @@ const init = async () => {
     }).setFile(REMOTE_DOC)
       .setXFDF(XFDF)
       .merge();
-    
-    
   })
 }
 
