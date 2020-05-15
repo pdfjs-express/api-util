@@ -60,7 +60,7 @@ class RequestBuilder {
     const error = json.error;
 
     if (error) {
-      throw new Error(error.message)
+      throw new Error(error.message || error)
     }
 
     const { url, id, key, xfdf } = json;
