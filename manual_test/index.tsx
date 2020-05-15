@@ -104,9 +104,25 @@ const App = () => {
 
 
   const get = async () => {
-    const blob = await result.getBlob();
-    var url = URL.createObjectURL(blob);
-    window.open(url,'_blank')
+    try {
+      const blob = await result.getBlob();
+      var url = URL.createObjectURL(blob);
+      window.open(url,'_blank')
+    } catch (e) {
+      setError(e.message)
+    }
+
+  }
+
+  const deleteFile = async () => {
+    try {
+      setLoading(true);
+      await result.deleteFile();
+      reset();
+      setLoading(false);
+    } catch (e) {
+      setError(e.message)
+    }
   }
 
 
@@ -298,7 +314,7 @@ const App = () => {
               Get
             </button>
 
-            <button className='big'>
+            <button className='big' onClick={deleteFile}>
               Delete
             </button>
           </div>

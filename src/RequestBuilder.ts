@@ -48,10 +48,11 @@ class RequestBuilder {
 
     let json;
     try {
-      json = await fetch(this.endpoint?.url, {
+      const data = await fetch(this.endpoint?.url, {
         method: this.endpoint?.method,
         body: form as unknown as FormData,
-      }).then(d => d.json());
+      });
+      json = await data.json();
     } catch (e) {
       throw e;
     }
