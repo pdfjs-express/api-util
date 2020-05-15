@@ -1,0 +1,164 @@
+
+
+:root {
+  --container-padding: 20px;
+  --border-color: rgb(116, 116, 218);
+  --primary-color: rgb(138, 138, 221);
+  --accent-color: rgb(165, 165, 231);
+  --accent-color-light: rgb(202, 202, 235);
+  --accent-color-dark: rgb(80, 80, 177);
+}
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: arial;
+  background-color: var(--accent-color-light);
+
+
+  p {
+    margin: 0;
+  }
+
+  * {
+    color: #222222;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  color: white;
+  text-align: center;
+  margin-top: var(--container-padding);
+  animation: spin 3s infinite linear;
+}
+
+.error {
+  margin-top: var(--container-padding);
+  background-color: rgb(207, 31, 31);
+  border-radius: 4px;
+  p {
+    color: white !important;
+  }
+
+  padding: var(--container-padding);
+  text-align: center;
+}
+
+select {
+  background-color: transparent;
+  height: 40px;
+}
+
+.preview {
+  background-color: var(--accent-color);
+}
+
+.result {
+  background-color: var(--primary-color);
+
+
+}
+
+button {
+  background-color: var(--accent-color-dark);
+  color: white;
+  border: none;
+  cursor: pointer;
+  &.big {
+    padding: 10px 20px;
+    min-width: 100px;
+  }
+
+  &.hollow {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: black;
+  }
+}
+
+.app {
+  display: flex;
+  width: 100vw;
+  // height: 100vh;
+}
+
+.list, .custom-options {
+  padding: var(--container-padding);
+  border-left: 0;
+  flex-basis: 33.33%;
+
+  &:last-of-type {
+    border-right: none;
+  }
+}
+
+.list {
+  .item {
+    margin-bottom: var(--container-padding);
+     p {
+       margin-bottom: 5px;
+     }
+    .text {
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      width: 100%;
+      min-height: 40px;
+    }
+    .input {
+      display: flex;
+
+      input, textarea {
+        background-color: transparent;
+      }
+
+      input[type='file'] {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+
+  .saved {
+    margin-top: var(--container-padding);
+
+    .items {
+      margin-bottom: 10px;
+    }
+
+    .saved-item {
+      margin-top: 5px;
+      border: 1px solid var(--border-color);
+      border-radius: 2px;
+      padding: 5px;
+      cursor: pointer;
+      font-size: 12px !important;
+
+      &:hover {
+        background-color: var(--border-color);
+      }
+    }
+  }
+
+  .controls {
+    display: flex;
+
+    button {
+      flex-basis: 50%;
+    }
+  }
+}
