@@ -59,12 +59,14 @@ export class Response {
       return this.blob;
     }
 
-    const blob = await fetch(this.url, {
+    let blob: Blob = await fetch(this.url, {
       method: 'get',
       headers: {
         Authorization: this.key
-      }
+      },
     }).then((resp: any) => resp.blob());
+
+    blob = blob.slice(0, blob.size, "application/pdf")
 
     this.blob = blob;
     return blob;

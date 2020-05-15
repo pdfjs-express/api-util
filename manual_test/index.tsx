@@ -75,7 +75,7 @@ const App = () => {
       }
 
       if (file) {
-        u.setFile(xfdf)
+        u.setFile(file)
       }
 
       let result: Response;
@@ -292,7 +292,7 @@ const App = () => {
         </div>
 
         {
-          !result &&
+          result &&
           <div className='controls'>
             <button className='big' onClick={get}>
               Get
