@@ -58,6 +58,8 @@ class ExpressUtils {
       size = 0; // string doesnt have a size
     } else if (isClient && (file instanceof File || file instanceof Blob)) {
       size = file.size;
+    } else if (isClient && file instanceof Uint8Array) {
+      size = file.length;
     } else if (!isClient && file instanceof Buffer) {
       size = file.length;
     } else {
