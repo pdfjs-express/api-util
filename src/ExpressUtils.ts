@@ -9,7 +9,7 @@ type ExpressUtilsOptions = {
   clientKey: string
 }
 
-export type FileType = string | Blob | File | Buffer;
+export type FileType = string | Blob | File | Buffer | BlobPart;
 
 /**
  * A class for interacting with the PDF.js Express REST APIs
@@ -53,13 +53,19 @@ class ExpressUtils {
    */
   setFile(file: FileType) {
 
+    // try to convert to a blob first
+    if (isClient && typeof file !== 'string' && !(file instanceof Blob) && !(file instanceof File)) {
+      try {
+        // @ts-ignore
+        file = new Blob(file);
+      } catch (e) {}
+    }
+
     let size;
     if (typeof file === 'string') {
       size = 0; // string doesnt have a size
     } else if (isClient && (file instanceof File || file instanceof Blob)) {
       size = file.size;
-    } else if (isClient && file instanceof Uint8Array) {
-      size = file.length;
     } else if (!isClient && file instanceof Buffer) {
       size = file.length;
     } else {
