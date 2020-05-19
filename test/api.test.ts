@@ -1,5 +1,4 @@
 import { readFixture } from './util';
-import { FormData } from 'isomorphic-form-data';
 import { ENDPOINTS } from './../src/config';
 import APIUtils from '../src/ExpressUtils';
 import fetch from 'isomorphic-fetch';
@@ -9,6 +8,7 @@ jest.mock('isomorphic-fetch');
 
 const mockNextFetch = (resp) => {
   let params;
+  // @ts-ignore
   fetch.mockImplementationOnce((...args) => {
     params = args;
     return Promise.resolve({
