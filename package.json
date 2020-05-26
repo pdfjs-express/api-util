@@ -10,7 +10,7 @@
     "manual": "ENV=test concurrently \"npm run build\" \"wait-on dist/index.js && parcel manual_test/index.html -d parcel_dist\" ",
     "manual-prod": "ENV=production concurrently \"npm run build\" \"wait-on dist/index.js && parcel manual_test/index.html -d parcel_dist\" ",
     "prepublishOnly": "ENV=production npm run build",
-    "prepack": "npm run build && npm run docs"
+    "prepack": "ENV=production npm run build && npm run docs"
   },
   "repository": {
     "type": "git",
