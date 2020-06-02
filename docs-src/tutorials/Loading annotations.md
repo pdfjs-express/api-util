@@ -9,6 +9,7 @@ import ExpressUtils from '@pdftron/pdfjs-express-utils'
 WebViewer({
   path: '/path/to/lib',
   licenseKey: 'Insert license key here', // optional
+  disableFlattenedAnnotations: true // disables rendering flattened annotations
 }, document.getElementById('viewer')).then((instance) => {
 
   const utils = new ExpressUtils({
@@ -17,7 +18,7 @@ WebViewer({
   });
 
   const { docViewer, annotManager } = instance;
-  
+
   docViewer.on('documentLoaded', async () => {
     const data = await docViewer.getDocument().getFileData();
     u.setFile(data);
