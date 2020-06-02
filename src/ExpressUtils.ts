@@ -57,7 +57,7 @@ class ExpressUtils {
     if (isClient && typeof file !== 'string' && !(file instanceof Blob) && !(file instanceof File)) {
       try {
         // @ts-ignore
-        file = new Blob(file);
+        file = new Blob([file], { type: 'application/pdf' });
       } catch (e) {}
     }
 
