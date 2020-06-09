@@ -11,6 +11,16 @@ type ExpressUtilsOptions = {
 
 export type FileType = string | Blob | File | Buffer | BlobPart;
 
+export type WatermarkOptions = {
+  text?: string;
+  color?: string,
+  position?: 'center' | 'top' | 'bottom';
+  scale?: number;
+  fontSize?: number;
+  opacity?: number;
+  rotation?: number;
+}
+
 /**
  * A class for interacting with the PDF.js Express REST APIs
  */
@@ -176,6 +186,41 @@ class ExpressUtils {
       .setEndpoint(ENDPOINTS.EXTRACT)
       .setFile(this.activeFile)
       .setLicense(this.activeKey)
+      .make();
+    
+    this.done();
+    return response;
+  }
+
+  /**
+   * Calls the PDF.js Express to apply a watermark to the document
+   * @param {Object} options
+   * @param {string} [options.text] The text to apply as the watermark
+   * @param {string} [options.color] The color to set the text to. Must be a valid CSS color. Defaults to 'blue'
+   * @param {string} [options.position] The position of the watermark. Must be 'center', 'top', or 'bottom'. Defaults to 'center'
+   * @param {number} [options.scale] The scale of the watermark relative to the document. Must be a number between 0 and 1. Ignored if fontSize is set. Defaults to 0.5
+   * @param {number} [options.fontSize] The font size to use. Overrides the 'scale' option
+   * @param {number} [options.opacity] The opacity of the watermark. Must be value between 0 and 1. Defaults to 0.3
+   * @param {number} [options.rotation] The rotation of the watermark in degrees. Defaults to 45
+   * @returns {Promise<Response>} Resolves to a Response object.
+   * @example
+   * const instance = new ExpressUtils({ serverKey: '', clientKey: '' });
+   * instance.setFile(myFile)
+   * const resp = await instance.watermark({
+   *   text: "Property of Joe",
+   *   color: "red"
+   * });
+   */
+  async watermark(options: WatermarkOptions): Promise<Response> {
+    if (!this.activeFile) {
+      return throwMissingDataError('extract', ['file'])
+    }
+
+    const response = await new RequestBuilder()
+      .setEndpoint(ENDPOINTS.WATERMARK)
+      .setFile(this.activeFile)
+      .setLicense(this.activeKey)
+      .setData(options)
       .make();
     
     this.done();

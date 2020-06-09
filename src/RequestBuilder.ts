@@ -11,9 +11,15 @@ class RequestBuilder {
   private xfdf?: string;
   private license?: string;
   private endpoint?: Endpoint;
+  private otherData?: Record<string, any>
   
   setFile(file: FileType) {
     this.file = file;
+    return this;
+  }
+
+  setData(data: Record<string, any>) {
+    this.otherData = data;
     return this;
   }
 
@@ -41,6 +47,12 @@ class RequestBuilder {
 
     form.append('file', this.file);
     form.append('license', this.license);
+
+    if (this.otherData) {
+      Object.keys(this.otherData).forEach((key) => {
+        form.append(key, this.otherData[key])
+      })
+    }
 
     if (this.xfdf) {
       form.append('xfdf', this.xfdf);
