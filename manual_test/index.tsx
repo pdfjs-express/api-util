@@ -7,7 +7,8 @@ import './index.scss';
 const methods = [
   'merge',
   'set',
-  'extract'
+  'extract',
+  'watermark'
 ]
 
 type ItemType = 'key'|'xfdf'|'file'
@@ -89,6 +90,14 @@ const App = () => {
           break;
         case 'extract':
           result = await u.extract();
+          break;
+        case 'watermark':
+          result = await u.watermark({
+            color: 'red',
+            opacity: 1,
+            rotation: 0,
+            position: 'top'
+          });
           break;
       }
 
