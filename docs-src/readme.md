@@ -11,6 +11,7 @@ The API can currently perform the following actions:
 - Merge annotations into a PDF (XFDF into PDF)
 - Set annotations on a PDF (XFDF into PDF)
 - Extract annotations from a PDF (XFDF from PDF)
+- Add a watermark to a PDF
 
 It can be used on either the server or the client.
 
