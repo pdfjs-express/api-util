@@ -30,6 +30,7 @@ class ExpressUtils {
   private activeKey: string;
   private activeFile?: FileType;
   private activeXFDF?: string;
+  private activeHeaders?: Record<string, string>
 
   /**
    * Initialize the class
@@ -46,7 +47,7 @@ class ExpressUtils {
    */
   constructor({
     serverKey,
-    clientKey
+    clientKey,
   }: ExpressUtilsOptions) {
     if (!serverKey && !clientKey) {
       throwMissingDataError('constructor', ['serverKey', 'clientKey'])
@@ -54,12 +55,13 @@ class ExpressUtils {
 
     //@ts-ignore
     this.activeKey = isClient ? clientKey : serverKey;
+    this.activeHeaders = {};
   }
 
   /**
    * Sets the file to process. Throws if the file is in memory and is too big (5.5 MB max).
    * @param {string|Blob|File|Buffer} file The file to process. Type must be 'string' (url) if the file is over 5.5mb
-   * @returns {ExpressRESTUtil} Returns current instance for function chaining
+   * @returns {ExpressUtils} Returns current instance for function chaining
    */
   setFile(file: FileType) {
 
@@ -91,9 +93,19 @@ class ExpressUtils {
   }
 
   /**
+   * Sets headers to be passed when the API downloads your document. Only used when 'file' is a URL.
+   * @param {Object} headers An object representing the headers to forward
+   * @returns {ExpressUtils} Returns current instance for function chaining
+   */
+  setHeaders(headers: Record<string, string>) {
+    this.activeHeaders = headers;
+    return this
+  }
+
+  /**
    * Sets the XFDF to process. Throws if XFDF is empty or not a string
    * @param {string} xfdf The XFDF to use in the conversion
-   * @returns {ExpressRESTUtil} Returns current instance for function chaining
+   * @returns {ExpressUtils} Returns current instance for function chaining
    */
   setXFDF(xfdf: string) {
     if (typeof xfdf !== 'string' || xfdf.trim() === '') {
@@ -106,6 +118,7 @@ class ExpressUtils {
   private done() {
     this.activeFile = undefined;
     this.activeXFDF = undefined;
+    this.activeHeaders = undefined;
   }
 
   /**
@@ -132,6 +145,7 @@ class ExpressUtils {
       .setFile(this.activeFile)
       .setXFDF(this.activeXFDF)
       .setLicense(this.activeKey)
+      .setHeaders(this.activeHeaders)
       .make();
     
     this.done();
@@ -162,6 +176,7 @@ class ExpressUtils {
       .setFile(this.activeFile)
       .setXFDF(this.activeXFDF)
       .setLicense(this.activeKey)
+      .setHeaders(this.activeHeaders)
       .make();
     
     this.done();
@@ -186,6 +201,7 @@ class ExpressUtils {
       .setEndpoint(ENDPOINTS.EXTRACT)
       .setFile(this.activeFile)
       .setLicense(this.activeKey)
+      .setHeaders(this.activeHeaders)
       .make();
     
     this.done();
@@ -221,10 +237,30 @@ class ExpressUtils {
       .setFile(this.activeFile)
       .setLicense(this.activeKey)
       .setData(options)
+      .setHeaders(this.activeHeaders)
       .make();
     
     this.done();
     return response;
+  }
+
+  /**
+   * Creates a new instance of the utility request from the response of another
+   * @param response The response object from a previous API request
+   * @returns {ExpressUtils}
+   */
+  static fromResponse(response: Response) {
+    const inst = new ExpressUtils({
+      serverKey: response.license,
+      clientKey: response.license
+    });
+
+    inst.setFile(response.url);
+    inst.setHeaders({
+      Authentication: response.key
+    })
+
+    return inst
   }
 }
 

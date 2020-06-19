@@ -29,14 +29,14 @@ export class Response {
   public id?: string
   public key?: string
   public xfdf?: string
-  private license?: string
+  license?: string
 
   constructor({ 
     url,
     id,
     key,
     license,
-    xfdf
+    xfdf,
   }: ResponseOptions) {
     this.url = url;
     this.id = id;
