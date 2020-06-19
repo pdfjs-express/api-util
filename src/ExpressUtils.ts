@@ -245,9 +245,22 @@ class ExpressUtils {
   }
 
   /**
-   * Creates a new instance of the utility request from the response of another
-   * @param response The response object from a previous API request
+   * Creates a new instance of the utility request from the response of another. Used for chaining API calls
+   * @param {Response} response The response object from a previous API request
    * @returns {ExpressUtils}
+   * @example
+   * const instance = new ExpressUtils({ serverKey: '', clientKey: '' });
+   * instance.setFile(myFile)
+   * instance.setXFDF(xfdfString)
+   * const resp = await instance.merge();
+   * 
+   * const chainedInstance = ExpressUtils.fromResponse(resp)
+   * const resp2 = await instance.watermark({
+   *   text: "Property of Joe",
+   *   color: "red"
+   * })
+   * 
+   * const watermarkedBlob = await resp2.getBlob()
    */
   static fromResponse(response: Response) {
     const inst = new ExpressUtils({

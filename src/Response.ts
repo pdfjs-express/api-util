@@ -3,16 +3,6 @@ import fetch from 'isomorphic-fetch';
 import ISOFormData from 'isomorphic-form-data';
 import { throwInvalidRequestError } from './util/errors';
 
-/**
- * A class representing the response from the Express REST API.
- * Contains utility methods for working with files.
- * Should not be directly instantiated, and should be returned the main SDK APIs.
- * 
- * @property {string} url The URL used for downloading the document
- * @property {string} id The ID of the document
- * @property {string} key The authentication key used to download the file. Get requests to 'url` must contain a `Authorization: {key}` header
- * @property {string} [xfdf] The xfdf for the document
- */
 
 type ResponseOptions = {
   url: string,
@@ -22,6 +12,14 @@ type ResponseOptions = {
   xfdf: string
 }
 
+/**
+ * A class representing a response from the API. Should not be created directly, but should be retrieved from methods in the ExpressUtils class.
+ * @property {string} url The URL that you can download the file from
+ * @property {string} id The ID of the file
+ * @property {string} key The key used for authenticating the request when downloading the file from 'url'
+ * @property {string} xfdf The XFDF returned from the response. Only set if calling an endpoint that extracts XFDF
+ * @property {string} license The license that was passed to the API
+ */
 export class Response {
 
   private blob?: Blob;
@@ -29,7 +27,7 @@ export class Response {
   public id?: string
   public key?: string
   public xfdf?: string
-  license?: string
+  public license?: string
 
   constructor({ 
     url,
