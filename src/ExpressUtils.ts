@@ -270,7 +270,7 @@ class ExpressUtils {
 
     inst.setFile(response.url);
     inst.setHeaders({
-      Authentication: response.key
+      Authorization: response.key
     })
 
     return inst

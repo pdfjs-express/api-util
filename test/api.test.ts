@@ -2,7 +2,6 @@ import { readFixture } from './util';
 import { ENDPOINTS } from './../src/config';
 import APIUtils from '../src/ExpressUtils';
 import fetch from 'isomorphic-fetch';
-import assert from 'assert';
 
 jest.mock('isomorphic-fetch');
 
@@ -29,8 +28,7 @@ const assertFormDataContains = (data, key, value) => {
     return s.includes(`name="${key}"`)
   });
 
-  assert.equal(_streams[i + 1], value);
-
+  expect(_streams[i + 1]).toEqual(value);
 }
 
 const KEYS = { serverKey: '123', clientKey: '456' }
@@ -55,14 +53,15 @@ describe('API tests', () => {
         .setXFDF(XFDF);
       
       const resp = await instance.merge();
-      assert.ok(resp);
-      assert.ok(resp?.id);
-      assert.ok(resp?.url);
-      assert.ok(resp?.key);
-      assert.ok(resp?.deleteFile);
+
+      expect(resp).toBeTruthy();
+      expect(resp?.id).toBeTruthy();
+      expect(resp?.url).toBeTruthy();
+      expect(resp?.key).toBeTruthy();
+      expect(resp?.deleteFile).toBeTruthy();
   
       const params = getParams();
-      assert.equal(params[0], ENDPOINTS.MERGE.url);
+      expect(params[0]).toEqual(ENDPOINTS.MERGE.url);
     });
   
     it('can call the set endpoint', async () => {
@@ -77,14 +76,14 @@ describe('API tests', () => {
         .setXFDF(XFDF);
       
       const resp = await instance.set();
-      assert.ok(resp);
-      assert.ok(resp?.id);
-      assert.ok(resp?.url);
-      assert.ok(resp?.key);
-      assert.ok(resp?.deleteFile);
+      expect(resp).toBeTruthy()
+      expect(resp?.id).toBeTruthy()
+      expect(resp?.url).toBeTruthy()
+      expect(resp?.key).toBeTruthy()
+      expect(resp?.deleteFile).toBeTruthy()
   
       const params = getParams();
-      assert.equal(params[0], ENDPOINTS.SET.url);
+      expect(params[0]).toEqual(ENDPOINTS.SET.url);
     });
   
     it('can call the extract endpoint', async () => {
@@ -96,11 +95,11 @@ describe('API tests', () => {
       instance.setFile(BLOB);
       
       const resp = await instance.extract();
-      assert.ok(resp);
-      assert.ok(resp?.xfdf);
+      expect(resp).toBeTruthy()
+      expect(resp?.xfdf).toBeTruthy()
   
       const params = getParams();
-      assert.equal(params[0], ENDPOINTS.EXTRACT.url);
+      expect(params[0]).toEqual(ENDPOINTS.EXTRACT.url);
     });
   
     it('can call the delete endpoint', async () => {
@@ -121,11 +120,77 @@ describe('API tests', () => {
       await resp.deleteFile();
   
       const params = getParams();
-      assert.equal(params[0], ENDPOINTS.DELETE.url);
-      assert.ok(params[1].body)
+      expect(params[0]).toEqual(ENDPOINTS.DELETE.url);
+      expect(params[1].body).toBeTruthy()
       const data = params[1].body;
       assertFormDataContains(data, 'license', '123');
       assertFormDataContains(data, 'id', '1234');
+    })
+
+    it('can call the watermark endpoint', async () => {
+      const getParams = mockNextFetch({
+        url: 'https://myfile.com',
+        id: '1234',
+        key: 'aaa||bbb'
+      });
+  
+      const instance = new APIUtils(KEYS);
+      instance.setFile(BLOB)
+      
+      const resp = await instance.watermark({
+        text: "Hello world",
+        color: "red"
+      });
+      
+      await resp.deleteFile();
+  
+      const params = getParams();
+      expect(params[0]).toEqual(ENDPOINTS.WATERMARK.url);
+      expect(params[1].body).toBeTruthy()
+      const data = params[1].body;
+      assertFormDataContains(data, 'license', '123');
+      assertFormDataContains(data, 'text', 'Hello world');
+      assertFormDataContains(data, 'color', 'red');
+    })
+
+    it('can chain endpoints', async () => { 
+      const getParams = mockNextFetch({
+        url: 'https://myfile.com',
+        id: '1234',
+        key: 'aaa||bbb'
+      });
+
+      const instance = new APIUtils(KEYS);
+      instance.setFile(BLOB)
+      instance.setXFDF(XFDF);
+
+      const resp = await instance.merge();
+      let params = getParams();
+      let data = params[1].body;
+      expect(params[0]).toEqual(ENDPOINTS.MERGE.url);
+      expect(params[1].body).toBeTruthy()
+      assertFormDataContains(data, 'xfdf', XFDF);
+
+      const getParams2 = mockNextFetch({
+        url: 'https://myfile2.com',
+        id: '4321',
+        key: 'bbbb'
+      });
+
+      const instance2 = APIUtils.fromResponse(resp);
+      const resp2 = await instance2.watermark({
+        text: "hello world",
+        color: "red"
+      })
+      params = getParams2();
+      data = params[1].body;
+      assertFormDataContains(data, 'text', 'hello world')
+      assertFormDataContains(data, 'headers', JSON.stringify({ Authorization: 'aaa||bbb' }))
+      assertFormDataContains(data, 'color', 'red')
+
+      expect(resp2.key).toEqual('bbbb')
+      expect(resp2.id).toEqual('4321')
+      expect(resp2.url).toEqual('https://myfile2.com')
     })
   })
 
@@ -134,48 +199,48 @@ describe('API tests', () => {
     it('throws if a large file is added', async () => {
       const instance = new APIUtils(KEYS);
       const file = readFixture('large.pdf');
-      assert.throws(() => {
+
+      expect(() => {
         instance.setFile(file);
-      }, /That file is too large/);
+      }).toThrow(/That file is too large/)
     })
 
     it('throws if empty XFDF is pushed', async () => {
       const instance = new APIUtils(KEYS);
 
-      assert.throws(() => {
+      expect(() => {
         instance.setXFDF('');
-      }, /XFDF must be a string and cannot be empty/)
+      }).toThrow(/XFDF must be a string and cannot be empty/)
     })
 
     it('throws if APIs are called without parameters set', async () => {
 
       const instance = new APIUtils(KEYS);
 
-      assert.rejects(async () => {
+      expect(async () => {
         await instance.merge()
-      }, /requires properties/)
+      }).rejects.toThrow(/requires properties/)
 
-      assert.rejects(async () => {
+      expect(async () => {
         await instance.set()
-      }, /requires properties/)
-
+      }).rejects.toThrow(/requires properties/)
     })
 
     it('throws if keys are not passed', async () => {
-      assert.throws(() => {
+      expect(() => {
         // @ts-ignore
         const instance = new APIUtils({});
-      }, /requires properties/)
+      }).toThrow(/requires properties/)
     })
 
     it('throws if invalid file type is set', async () => {
 
       const instance = new APIUtils(KEYS);
-      
-      assert.throws(() => {
+
+      expect(() => {
         // @ts-ignore
         instance.setFile(23);
-      }, /File must be of type File/)
+      }).toThrow(/File must be of type File/)
     })
 
   })
