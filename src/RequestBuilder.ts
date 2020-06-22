@@ -12,6 +12,7 @@ class RequestBuilder {
   private license?: string;
   private endpoint?: Endpoint;
   private otherData?: Record<string, any>
+  private headers?: Record<string, string>
   
   setFile(file: FileType) {
     this.file = file;
@@ -20,6 +21,19 @@ class RequestBuilder {
 
   setData(data: Record<string, any>) {
     this.otherData = data;
+    return this;
+  }
+
+  setHeaders(headers: Record<string, string>): RequestBuilder {
+    if (!headers) return this;
+    try {
+      const keys = Object.keys(headers);
+      if (keys.length === 0) return this;
+    } catch (e) {
+      return this;
+    }
+
+    this.headers = headers;
     return this;
   }
 
@@ -52,6 +66,10 @@ class RequestBuilder {
       Object.keys(this.otherData).forEach((key) => {
         form.append(key, this.otherData[key])
       })
+    }
+
+    if (this.headers) {
+      form.append('headers', JSON.stringify(this.headers));
     }
 
     if (this.xfdf) {
