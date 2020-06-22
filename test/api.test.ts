@@ -192,6 +192,28 @@ describe('API tests', () => {
       expect(resp2.id).toEqual('4321')
       expect(resp2.url).toEqual('https://myfile2.com')
     })
+
+    it('can forward headers', async () => {
+      const getParams = mockNextFetch({
+        url: 'https://myfile.com',
+        id: '1234',
+        key: 'aaa||bbb'
+      });
+
+      const instance = new APIUtils(KEYS);
+      instance.setFile(BLOB)
+      instance.setXFDF(XFDF);
+      const headers = {
+        CustomHeader: "abc",
+        Auth: '123'
+      }
+      instance.setHeaders(headers)
+
+      await instance.set();
+      const params = getParams();
+      const data = params[1].body;
+      assertFormDataContains(data, "headers", JSON.stringify(headers))
+    })
   })
 
   describe('error handling', () => {
