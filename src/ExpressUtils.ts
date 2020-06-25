@@ -229,7 +229,7 @@ class ExpressUtils {
    */
   async watermark(options: WatermarkOptions): Promise<Response> {
     if (!this.activeFile) {
-      return throwMissingDataError('extract', ['file'])
+      return throwMissingDataError('watermark', ['file'])
     }
 
     const response = await new RequestBuilder()

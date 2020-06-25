@@ -55,8 +55,8 @@ class RequestBuilder {
   async make() {
     const form = new ISOFormData();
 
-    if (!this.file || !this.license || !this.endpoint) {
-      throwMissingDataError('make', ['file', 'endpoint', 'license']);
+    if (!this.file || !this.endpoint) {
+      throwMissingDataError('make', ['file', 'endpoint']);
     }
 
     form.append('file', this.file);
