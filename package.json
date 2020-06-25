@@ -1,6 +1,6 @@
 {
   "name": "@pdftron/pdfjs-express-utils",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A utility package for interacting with PDF.js Express APIs",
   "main": "dist/index.js",
   "scripts": {
