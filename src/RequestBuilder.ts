@@ -42,7 +42,7 @@ class RequestBuilder {
     return this;
   }
 
-  setLicense(license: string) {
+  setLicense(license: string = '') {
     this.license = license;
     return this;
   }
@@ -60,7 +60,9 @@ class RequestBuilder {
     }
 
     form.append('file', this.file);
-    form.append('license', this.license);
+    if (this.license) {
+      form.append('license', this.license);
+    }
 
     if (this.otherData) {
       Object.keys(this.otherData).forEach((key) => {

@@ -248,13 +248,6 @@ describe('API tests', () => {
       }).rejects.toThrow(/requires properties/)
     })
 
-    it('throws if keys are not passed', async () => {
-      expect(() => {
-        // @ts-ignore
-        const instance = new APIUtils({});
-      }).toThrow(/requires properties/)
-    })
-
     it('throws if invalid file type is set', async () => {
 
       const instance = new APIUtils(KEYS);

@@ -5,8 +5,8 @@ import { MAX_FILE_SIZE, ENDPOINTS } from './config';
 import RequestBuilder from './RequestBuilder';
 
 type ExpressUtilsOptions = {
-  serverKey: string,
-  clientKey: string
+  serverKey?: string,
+  clientKey?: string
 }
 
 export type FileType = string | Blob | File | Buffer | BlobPart;
@@ -34,9 +34,9 @@ class ExpressUtils {
 
   /**
    * Initialize the class
-   * @param {Object} options
-   * @param {string} options.serverKey Your server side license key. Can be fetched from your profile at https://pdfjs.express
-   * @param {string} options.clientKey Your client side license key. Can be fetched from your profile at https://pdfjs.express
+   * @param {Object} [options]
+   * @param {string} [options.serverKey] Your server side license key. Can be fetched from your profile at https://pdfjs.express
+   * @param {string} [options.clientKey] Your client side license key. Can be fetched from your profile at https://pdfjs.express
    * @example
    * import ExpressUtils from '@pdftron/pdfjs-express-utils'
    * 
@@ -48,9 +48,9 @@ class ExpressUtils {
   constructor({
     serverKey,
     clientKey,
-  }: ExpressUtilsOptions) {
+  }: ExpressUtilsOptions = {}) {
     if (!serverKey && !clientKey) {
-      throwMissingDataError('constructor', ['serverKey', 'clientKey'])
+      console.warn('No license key was provided, running in demo mode')
     }
 
     //@ts-ignore
@@ -264,8 +264,8 @@ class ExpressUtils {
    */
   static fromResponse(response: Response) {
     const inst = new ExpressUtils({
-      serverKey: response.license,
-      clientKey: response.license
+      serverKey: response?.license || '',
+      clientKey: response?.license || ''
     });
 
     inst.setFile(response.url);

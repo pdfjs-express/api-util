@@ -34,6 +34,16 @@ const utils = new ExpressUtils({
 })
 ```
 
+## Development
+License keys are not required for trial usage. Trial usage is rate limited and ouputs are watermarked/mangled.
+
+```js
+import ExpressUtils from '@pdftron/pdfjs-express-utils'
+
+// Runs in trial mode
+const utils = new ExpressUtils()
+```
+
 ## Examples
 
 ### Merge or Set XFDF into a PDF
