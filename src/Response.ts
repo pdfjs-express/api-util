@@ -92,7 +92,9 @@ export class Response {
     }
 
     const data = new ISOFormData();
-    data.append('license', this.license);
+    if (this.license) {
+      data.append('license', this.license);
+    }
     data.append('id', this.id);
 
     await fetch(ENDPOINTS.DELETE.url, {
