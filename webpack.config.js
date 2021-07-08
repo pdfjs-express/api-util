@@ -5,16 +5,10 @@ const webpack = require('webpack');
 const env = process.env.ENV;
 const mode = env === 'production' ? 'production' : 'development'
 
-module.exports = {
+const globalConfig = {
   entry: './src/index.ts',
   mode,
   watch: mode === 'development',
-  output: {
-    filename: 'index.js',
-    path: path.resolve(__dirname, 'dist'),
-    library: 'expressApiUtils',
-    libraryTarget: 'umd',
-  },
   module: {
     rules: [
       {
@@ -39,5 +33,28 @@ module.exports = {
       ENV: `'${env}'`
     })
   ]
-};
+}
+
+const serverConfig = {
+  ...globalConfig,
+  target: 'node',
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'dist/node'),
+    library: 'expressApiUtils',
+    libraryTarget: 'umd',
+  },
+}
+
+const clientConfig = {
+  ...globalConfig,
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'dist/browser'),
+    library: 'expressApiUtils',
+    libraryTarget: 'umd',
+  },
+}
+
+module.exports = [serverConfig, clientConfig]
 
