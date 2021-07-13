@@ -1,6 +1,6 @@
+import { getFetch } from './util/fetch';
+import { isServer } from './util/env';
 import { ENDPOINTS } from './config';
-import fetch from 'isomorphic-fetch';
-import ISOFormData from 'isomorphic-form-data';
 import { throwInvalidRequestError } from './util/errors';
 
 
@@ -12,6 +12,7 @@ type ResponseOptions = {
   xfdf: string
 }
 
+
 /**
  * A class representing a response from the API. Should not be created directly, but should be retrieved from methods in the ExpressUtils class.
  * @property {string} url The URL that you can download the file from
@@ -22,7 +23,7 @@ type ResponseOptions = {
  */
 export class Response {
 
-  private blob?: Blob;
+  private blob?: Blob | ArrayBuffer;
   public url?: string
   public id?: string
   public key?: string
@@ -47,7 +48,7 @@ export class Response {
    * Fetches and returns the file as a Blob
    * @returns {Promise<Blob>}
    */
-  async getBlob(): Promise<Blob> {
+  async getBlob(): Promise<Blob | ArrayBuffer> {
 
     if (!this.url) {
       throwInvalidRequestError('getBlob', 'There is no output file to fetch')
@@ -57,16 +58,22 @@ export class Response {
       return this.blob;
     }
 
-    let blob: Blob = await fetch(this.url, {
+    const fetch = getFetch();
+    let blob: Blob | ArrayBuffer = await fetch(this.url, {
       method: 'get',
       headers: {
         Authorization: this.key
       },
-    }).then((resp: any) => resp.blob());
+    }).then((resp: any) => {
+      if (isServer) {
+        return resp.buffer();
+      }
+      return resp.blob()
+    });
 
-    blob = blob.slice(0, blob.size, "application/pdf")
-
+    blob = (blob as Blob).slice(0, (blob as Blob).size, "application/pdf")
     this.blob = blob;
+
     return blob;
   }
 
@@ -90,13 +97,13 @@ export class Response {
     if (!this.id) {
       throwInvalidRequestError('deleteFile', 'There is no temporary file to delete')
     }
-
-    const data = new ISOFormData();
+    const FormData = isServer ? require('form-data') : window.FormData;
+    const data = new FormData();
     if (this.license) {
       data.append('license', this.license);
     }
     data.append('id', this.id);
-
+    const fetch = getFetch();
     await fetch(ENDPOINTS.DELETE.url, {
       method: ENDPOINTS.DELETE.method,
       body: data as unknown as FormData

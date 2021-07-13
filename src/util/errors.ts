@@ -4,7 +4,7 @@ export const throwFileTooLargeError = () => {
 }
 
 export const throwInvalidFileTypeError = () => {
-  throw new Error(`File must be of type File, Blob, Buffer, Array (or TypedArray), or string (url)`)
+  throw new Error(`File must be of type File, Blob, Array (or TypedArray), FileStream, or string (url)`)
 }
 
 export const throwInvalidXFDFError = () => {

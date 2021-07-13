@@ -1,10 +1,9 @@
+import { getFetch } from './util/fetch';
+import { isServer } from './util/env';
 import { Response } from './Response';
 import { Endpoint } from './spec/endpoint';
 import { throwMissingDataError } from './util/errors';
 import { FileType } from './ExpressUtils';
-import fetch from 'isomorphic-fetch';
-import ISOFormData from 'isomorphic-form-data';
-
 class RequestBuilder {
 
   private file?: FileType;
@@ -53,13 +52,14 @@ class RequestBuilder {
   }
 
   async make() {
-    const form = new ISOFormData();
+    const fd: typeof FormData = isServer ? require('form-data') : window.FormData;
+    const form = new fd();
 
     if (!this.file || !this.endpoint) {
       throwMissingDataError('make', ['file', 'endpoint']);
     }
 
-    form.append('file', this.file);
+    form.append('file', this.file as any);
     if (this.license) {
       form.append('license', this.license);
     }
@@ -80,6 +80,7 @@ class RequestBuilder {
 
     let json;
     try {
+      const fetch = getFetch();
       const data = await fetch(this.endpoint?.url, {
         method: this.endpoint?.method,
         body: form as unknown as FormData,
@@ -89,7 +90,7 @@ class RequestBuilder {
       throw e;
     }
 
-    const error = json.error;
+    const error = json.error || json.message;
 
     if (error) {
       throw new Error(error.message || error)

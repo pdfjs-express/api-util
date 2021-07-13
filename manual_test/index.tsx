@@ -1,4 +1,4 @@
-import Utils, { Response } from '../dist';
+import Utils from '../dist/browser';
 import React, { useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 

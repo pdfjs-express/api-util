@@ -3,13 +3,14 @@ import { isClient } from './util/env';
 import { throwFileTooLargeError, throwInvalidFileTypeError, throwInvalidXFDFError, throwMissingDataError } from './util/errors';
 import { MAX_FILE_SIZE, ENDPOINTS } from './config';
 import RequestBuilder from './RequestBuilder';
+import type { ReadStream } from 'fs';
 
 type ExpressUtilsOptions = {
   serverKey?: string,
   clientKey?: string
 }
 
-export type FileType = string | Blob | File | Buffer | BlobPart;
+export type FileType = string | Blob | File | BlobPart | ReadStream;
 
 export type WatermarkOptions = {
   text?: string;
@@ -60,7 +61,7 @@ class ExpressUtils {
 
   /**
    * Sets the file to process. Throws if the file is in memory and is too big (5.5 MB max).
-   * @param {string|Blob|File|Buffer} file The file to process. Type must be 'string' (url) if the file is over 5.5mb
+   * @param {string|Blob|File|ReadStream} file The file to process. Type must be 'string' (url) if the file is over 5.5mb
    * @returns {ExpressUtils} Returns current instance for function chaining
    */
   setFile(file: FileType) {
@@ -78,8 +79,8 @@ class ExpressUtils {
       size = 0; // string doesnt have a size
     } else if (isClient && (file instanceof File || file instanceof Blob)) {
       size = file.size;
-    } else if (!isClient && file instanceof Buffer) {
-      size = file.length;
+    } else if(!isClient && (!!(file as ReadStream).pipe)) {
+      size = 0; // cannot be determined
     } else {
       throwInvalidFileTypeError();
     }
